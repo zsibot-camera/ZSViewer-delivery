@@ -8,6 +8,7 @@ MODE="deb"
 WITH_DESKTOP=0
 CHECK_ONLY=0
 WORKDIR="$(mktemp -d "${TMPDIR:-/tmp}/zsviewer-install.XXXXXX")"
+DEST=""
 trap 'rm -rf "$WORKDIR"' EXIT
 
 usage() {
@@ -99,7 +100,15 @@ info "校验 SHA256 ..."
 ( cd "$WORKDIR" && grep "  ${ASSET}\$" SHA256SUMS | sha256sum -c - ) \
     || die "SHA256 校验失败，停止安装"
 
-# ---------- 3. 安装 ----------
+# ---------- 3. 安装依赖（AppImage / tar 需要手动补库） ----------
+if [[ "$MODE" != "deb" && ${#MISSING[@]} -gt 0 ]]; then
+    command -v apt >/dev/null || die "缺少 apt，无法自动安装依赖: ${MISSING[*]}"
+    info "安装缺少的系统依赖: ${MISSING[*]}"
+    sudo apt update
+    sudo apt install -y "${MISSING[@]}"
+fi
+
+# ---------- 4. 安装工具 ----------
 case "$MODE" in
     deb)
         command -v apt >/dev/null || die "缺少 apt；请改用 --appimage 或 --tar"
@@ -111,10 +120,6 @@ case "$MODE" in
         DEST="${HOME}/.local/opt/zsviewer"
         mkdir -p "$DEST"
         install -m 0755 "$WORKDIR/$ASSET" "$DEST/ZSViewer.AppImage"
-        if [[ ${#MISSING[@]} -gt 0 ]]; then
-            warn "AppImage 仍需要系统库，建议执行:"
-            warn "  sudo apt update && sudo apt install -y ${MISSING[*]}"
-        fi
         if [[ "$WITH_DESKTOP" == "1" ]]; then
             "$DEST/ZSViewer.AppImage" --install-desktop
         fi
@@ -125,10 +130,6 @@ case "$MODE" in
         rm -rf "$DEST"
         mkdir -p "$DEST"
         tar -xzf "$WORKDIR/$ASSET" -C "$DEST" --strip-components=1
-        if [[ ${#MISSING[@]} -gt 0 ]]; then
-            warn "仍缺少系统库，建议执行:"
-            warn "  sudo apt update && sudo apt install -y ${MISSING[*]}"
-        fi
         if [[ "$WITH_DESKTOP" == "1" ]]; then
             "$DEST/zsviewer-cli" --install-desktop
         fi
@@ -136,4 +137,8 @@ case "$MODE" in
         ;;
 esac
 
-info "运行: zsviewer --host <板端IP>（或 $DEST/ZSViewer）"
+if [[ "$MODE" == "deb" ]]; then
+    info "运行: zsviewer --host <板端IP>"
+else
+    info "运行: $DEST/ZSViewer --host <板端IP>"
+fi
