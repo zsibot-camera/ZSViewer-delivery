@@ -5,6 +5,22 @@
 
 ## [Unreleased]
 
+## [2.1.3] - 2026-11-18
+
+### Added
+- 板端模式自动切换：连接 Orin 时通过 SSH 调用 SDK deb 的
+  `sudo -n zscamera-mode tool`，把板子从 ROS `source:=local` 切到 UVDP 工具流；
+  关闭窗口后调用 `auto-ros` 恢复 ROS，板端 idle timer（30 s 无客户端）兜底。
+  链路断开时每 15 s 重试切 tool；板子重启/不可达（ssh rc=255/124）不计入
+  失败，恢复后自动重连；只有板端缺脚本/无权限等确定性失败连续 3 次才停用。
+- `--no-board-mode-switch`：关闭上述隐式切换；`--auto-start`/`--auto-stop`
+  保留为显式开关，语义改为 `tool`/`auto-ros`。
+
+### Changed
+- `--auto-start`/`--auto-stop` 不再调用旧版 `orin_stream_start.sh`/
+  `orin_stream_stop.sh`（UVDP v1 bridge，与 v2 客户端不兼容），改为
+  `zscamera-mode`；无界面模式同样更新。
+
 ## [2.1.2] - 2026-11-17
 
 ### Fixed
@@ -65,6 +81,7 @@
   避免 1920×1280 JPEG 解码过程中关闭程序触发 abort。
 - 标定入口兼容新 SDK 的 `calibration.data` 包装布局（`P1/P2/K/D/R1/R2`
   在 `data` 内），旧 bridge 的平铺布局保持不变。
+
 
 ## [2.1.0] - 2026-11-11
 
