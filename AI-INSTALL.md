@@ -97,19 +97,17 @@ tar -xzf ZSViewer-2.1.4-linux-x86_64.tar.gz
 
 ## 3. Windows 安装
 
-2.1.4 的发布资产只包含 Linux 包；Windows 安装包/便携版暂未随本版本提供。
-发布页若没有 `windows-x64` 资产，即为尚未发布，不要用 2.1.1 的 Windows 包代替
-（2.1.1 资产缺少 UVDP v2 直连代码，连不上 ZSCamera SDK 1.0.1）。需要 Windows 版
-请联系交付人员确认可用版本。
+2.1.4 提供安装版与便携版两个 Windows 包（Windows 10/11 x64），发布页应包含
+`ZSViewer-2.1.4-windows-x64-setup.exe` 与 `ZSViewer-2.1.4-windows-x64-portable.zip`。
 
 ### 3.1 安装版
 
-双击 `ZSViewer-<v>-windows-x64-setup.exe`，按向导完成。
+双击 `ZSViewer-2.1.4-windows-x64-setup.exe`，按向导完成。
 默认安装到 `%LOCALAPPDATA%\Programs\ZSViewer`，普通用户权限即可，不需要管理员。
 
 ### 3.2 便携版
 
-解压 `ZSViewer-<v>-windows-x64-portable.zip`，运行 `ZSViewer\ZSViewer.exe`。
+解压 `ZSViewer-2.1.4-windows-x64-portable.zip`，运行 `ZSViewer\ZSViewer.exe`。
 数据写入 exe 旁 `data\`，不写系统目录。
 
 命令行验证：
@@ -117,6 +115,8 @@ tar -xzf ZSViewer-2.1.4-linux-x86_64.tar.gz
 ```powershell
 .\ZSViewer\zsviewer-cli.exe --version
 ```
+
+预期输出 `ZSViewer 2.1.4`。
 
 ## 4. 连接板端
 
