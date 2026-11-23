@@ -4,9 +4,9 @@
 > ZSViewer 只读取板端流，不修改板端驱动、不重载内核模块、不重启板子。
 
 ZSViewer 是 RGB-D 查看 / 点云 / 抓图 / 录像工具，支持 Orin、Thor 与 RV1126B 板端。
-本包为 **2.1.3**，板端彩色流已由板端硬件（VIC/RGA）校正，工具端**不做二次去畸变**。
+本包为 **2.1.4**，板端彩色流已由板端硬件（VIC/RGA）校正，工具端**不做二次去畸变**。
 
-下载页：<https://github.com/zsibot-camera/ZSViewer-delivery/releases/tag/v2.1.3>
+下载页：<https://github.com/zsibot-camera/ZSViewer-delivery/releases/tag/v2.1.4>
 
 ### 一键安装（推荐）
 
@@ -18,13 +18,13 @@ chmod +x install.sh
 ```
 
 `install.sh` 支持 `--deb`（默认）、`--appimage`、`--tar`、`--version <v>`；
-远程主机可用 `ZSVIEWER_VERSION=2.1.3` 覆盖版本。
+远程主机可用 `ZSVIEWER_VERSION=2.1.4` 覆盖版本。
 
 ### 手动下载
 
 ```bash
-BASE=https://github.com/zsibot-camera/ZSViewer-delivery/releases/download/v2.1.3
-curl -fLO "$BASE/ZSViewer-2.1.3-amd64.deb"
+BASE=https://github.com/zsibot-camera/ZSViewer-delivery/releases/download/v2.1.4
+curl -fLO "$BASE/ZSViewer-2.1.4-amd64.deb"
 curl -fLO "$BASE/SHA256SUMS"
 sha256sum -c SHA256SUMS --ignore-missing
 ```
@@ -61,35 +61,35 @@ ffmpeg 已内置于包内 `ffmpeg/bin`，系统 PATH 中的 ffmpeg 仅作兜底�
 ### 2.1 deb（推荐）
 
 ```bash
-sudo apt install ./ZSViewer-2.1.3-amd64.deb
+sudo apt install ./ZSViewer-2.1.4-amd64.deb
 zsviewer-cli --version
 ```
 
-预期：`ZSViewer 2.1.3`。
+预期：`ZSViewer 2.1.4`。
 
 ### 2.2 AppImage（免安装）
 
 ```bash
-chmod +x ZSViewer-2.1.3-linux-x86_64.AppImage
-./ZSViewer-2.1.3-linux-x86_64.AppImage --version
+chmod +x ZSViewer-2.1.4-linux-x86_64.AppImage
+./ZSViewer-2.1.4-linux-x86_64.AppImage --version
 ```
 
 如果报 FUSE 相关错误：
 
 ```bash
-./ZSViewer-2.1.3-linux-x86_64.AppImage --appimage-extract-and-run
+./ZSViewer-2.1.4-linux-x86_64.AppImage --appimage-extract-and-run
 ```
 
 安装桌面菜单（可选，只写用户目录）：
 
 ```bash
-./ZSViewer-2.1.3-linux-x86_64.AppImage --install-desktop
+./ZSViewer-2.1.4-linux-x86_64.AppImage --install-desktop
 ```
 
 ### 2.3 tar.gz（绿色部署）
 
 ```bash
-tar -xzf ZSViewer-2.1.3-linux-x86_64.tar.gz
+tar -xzf ZSViewer-2.1.4-linux-x86_64.tar.gz
 ./ZSViewer/ZSViewer --version
 ./ZSViewer/ZSViewer --install-desktop   # 可选
 ./ZSViewer/ZSViewer
@@ -97,14 +97,19 @@ tar -xzf ZSViewer-2.1.3-linux-x86_64.tar.gz
 
 ## 3. Windows 安装
 
+2.1.4 的发布资产只包含 Linux 包；Windows 安装包/便携版暂未随本版本提供。
+发布页若没有 `windows-x64` 资产，即为尚未发布，不要用 2.1.1 的 Windows 包代替
+（2.1.1 资产缺少 UVDP v2 直连代码，连不上 ZSCamera SDK 1.0.1）。需要 Windows 版
+请联系交付人员确认可用版本。
+
 ### 3.1 安装版
 
-双击 `ZSViewer-2.1.3-windows-x64-setup.exe`，按向导完成。
+双击 `ZSViewer-<v>-windows-x64-setup.exe`，按向导完成。
 默认安装到 `%LOCALAPPDATA%\Programs\ZSViewer`，普通用户权限即可，不需要管理员。
 
 ### 3.2 便携版
 
-解压 `ZSViewer-2.1.3-windows-x64-portable.zip`，运行 `ZSViewer\ZSViewer.exe`。
+解压 `ZSViewer-<v>-windows-x64-portable.zip`，运行 `ZSViewer\ZSViewer.exe`。
 数据写入 exe 旁 `data\`，不写系统目录。
 
 命令行验证：
@@ -112,8 +117,6 @@ tar -xzf ZSViewer-2.1.3-linux-x86_64.tar.gz
 ```powershell
 .\ZSViewer\zsviewer-cli.exe --version
 ```
-
-预期：`ZSViewer 2.1.3`。
 
 ## 4. 连接板端
 
@@ -172,7 +175,7 @@ zsviewer-cli --src auto --host 192.168.55.1 --no-gui --snapshot /tmp/zs.png
 | 连接超时 | IP/端口/网络 | 确认板端 IP、同网段、TCP 9600 放行 |
 | 有连接但无图像 | 板端是否出流 | 先看板端帧计数/ROS 话题；不要改板端 VPI 后端 |
 | 图像不动 | 工具/消费端 | 抓包/看帧序号；板端正常时修工具读取，不要换板端后端 |
-| 彩色有畸变 | 板端是否校正 | 2.1.3 依赖板端校正流；确认板端 `rectified=true` |
+| 彩色有畸变 | 板端是否校正 | 2.1.4 依赖板端校正流；确认板端 `rectified=true` |
 | 深度值差 10 倍 | 单位 | 视差是像素；用 `z = fx * baseline / disparity` |
 | Windows 缺 VC 运行库 | 系统版本 | 使用 Windows 10/11 x64；安装包已带所需运行库 |
 | 录像无 ffmpeg | 包内 `ffmpeg/bin` | 确认解压完整；或系统 PATH 提供 ffmpeg |
@@ -189,5 +192,5 @@ zsviewer-cli --src auto --host 192.168.55.1 --no-gui --snapshot /tmp/zs.png
 zsviewer-cli --version
 ```
 
-输出 `ZSViewer 2.1.3` 即匹配本包。板端 SDK/UVDP 版本不匹配时，工具会明确报错，
+输出 `ZSViewer 2.1.4` 即匹配本包。板端 SDK/UVDP 版本不匹配时，工具会明确报错，
 不要用旧协议强行连接。

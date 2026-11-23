@@ -3,7 +3,7 @@
 set -euo pipefail
 
 REPO="zsibot-camera/ZSViewer-delivery"
-VERSION="${ZSVIEWER_VERSION:-2.1.3}"
+VERSION="${ZSVIEWER_VERSION:-2.1.4}"
 MODE="deb"
 WITH_DESKTOP=0
 CHECK_ONLY=0
@@ -15,7 +15,7 @@ usage() {
     cat <<'EOF'
 用法: ./install.sh [选项]
 
-  --version <v>    安装指定版本（默认 2.1.3）
+  --version <v>    安装指定版本（默认 2.1.4）
   --deb            使用 deb 安装（默认，需要 sudo + apt）
   --appimage       使用 AppImage（免安装，可选 --with-desktop）
   --tar            使用 tar.gz 解压到 ~/.local/opt
